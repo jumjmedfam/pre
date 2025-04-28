@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Premed Qirat Registration</title>
+  <style>
+    /* Basic Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #00796b;
+      text-align: center;
+    }
+    p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #555;
+      text-align: center;
+    }
+    .form-container {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 25px 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+    .form-container input, .form-container select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .form-container button:hover {
+      background-color: #004d40;
+    }
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #888;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Premed Qirat Registration</h1>
+  <p>Fill out the form to enroll easily!</p>
+
+  <div class="form-container">
+    <form id="registrationForm">
+      <input type="text" id="fullName" placeholder="Full Name" required>
+
+      <select id="department">
+        <option value="">Select Department (Optional)</option>
+        <option value="MD">MD</option>
+        <option value="DMD">DMD</option>
+        <option value="Prefer not to say">Prefer not to say</option>
+      </select>
+
+      <input type="text" id="qiratSatMon" placeholder="Qirat Type (Sat-Mon)" required>
+
+      <input type="text" id="qiratTueThu" placeholder="Qirat Type (Tue-Thu)" required>
+
+      <input type="tel" id="phoneNumber" placeholder="Phone Number" required>
+
+      <button type="submit">Submit My Registration</button>
+      <div class="message" id="message"></div>
+    </form>
+  </div>
+
+  <div class="footer">
+    © 2025 Premed Data Collection | Designed with ❤️
+  </div>
+
+<script>
+  const form = document.getElementById('registrationForm');
+  const messageDiv = document.getElementById('message');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    messageDiv.textContent = "Submitting...";
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const department = document.getElementById('department').value.trim();
+    const qiratSatMon = document.getElementById('qiratSatMon').value.trim();
+    const qiratTueThu = document.getElementById('qiratTueThu').value.trim();
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+
+    const textMessage = `
+📋 New Premed Student Registered:
+👤 Full Name: ${fullName}
+🏥 Department: ${department || 'Not Provided'}
+🕌 Qirat (Sat-Mon): ${qiratSatMon}
+🕌 Qirat (Tue-Thu): ${qiratTueThu}
+📞 Phone Number: ${phoneNumber}
+    `;
+
+    const botToken = '7405213001:AAGXw5JnD914k_7W_pFkl7x_se7F3Lz578M';
+    const adminIds = ['7897840965', '5148030214']; // Add more if needed
+
+    try {
+      await Promise.all(adminIds.map(adminId => {
+        return fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: adminId,
+            text: textMessage
+          })
+        });
+      }));
+
+      messageDiv.style.color = "green";
+      messageDiv.textContent = "✅ Successfully submitted! Thank you.";
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      messageDiv.style.color = "red";
+      messageDiv.textContent = "❌ Submission failed. Try again.";
+    }
+  });
+</script>
+
+</body>
+</html>
